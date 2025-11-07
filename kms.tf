@@ -133,7 +133,7 @@ module "kms_key" {
   count = var.kms_key_arn == null ? 1 : 0
 
   source  = "schubergphilis/mcaf-kms/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.3.1"
 
   name        = var.name
   description = "KMS key used for encrypting all energy labeler resources"

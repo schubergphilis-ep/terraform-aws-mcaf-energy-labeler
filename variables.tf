@@ -76,7 +76,7 @@ variable "kms_key_arn" {
 
 variable "kms_key_decrypt_iam_principals" {
   type        = list(string)
-  default     = null
+  default     = []
   description = "List of IAM principal ARNs allowed to decrypt the KMS key. Required if kms_key_arn is not set."
 
   validation {
