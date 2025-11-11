@@ -22,7 +22,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   statement {
     sid       = "Read/List permissions for all IAM users"
     effect    = "Allow"
-    resources = ["*"]
+    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
 
     actions = [
       "kms:Describe*",
@@ -133,7 +133,7 @@ module "kms_key" {
   count = var.kms_key_arn == null ? 1 : 0
 
   source  = "schubergphilis/mcaf-kms/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.3.1"
 
   name        = var.name
   description = "KMS key used for encrypting all energy labeler resources"

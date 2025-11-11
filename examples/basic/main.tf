@@ -1,10 +1,10 @@
 terraform {
-  required_version = ">= 1.3"
+  required_version = ">= 1.9"
 
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = ">= 4.39.0"
+      version = ">= 5.20"
     }
   }
 }
@@ -19,6 +19,10 @@ module "aws-energy-labeler-single-account" {
   config = {
     single_account_id = "123456789012"
   }
+
+  subnet_ids = [
+    "subnet-12345678"
+  ]
 }
 
 module "aws-energy-labeler-zone" {
@@ -29,4 +33,8 @@ module "aws-energy-labeler-zone" {
   config = {
     zone_name = "MYZONE"
   }
+
+  subnet_ids = [
+    "subnet-12345678"
+  ]
 }

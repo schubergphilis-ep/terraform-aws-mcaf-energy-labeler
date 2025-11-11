@@ -124,7 +124,7 @@ module "iam_role" {
   for_each = local.roles
 
   source  = "schubergphilis/mcaf-role/aws"
-  version = "~> 0.4.0"
+  version = "~> 0.5.3"
 
   name                  = each.value.name
   create_policy         = try(each.value.create_policy, null)
@@ -164,7 +164,7 @@ resource "aws_cloudwatch_event_target" "default" {
 
 module "aws_ecs_container_definition" {
   source  = "terraform-aws-modules/ecs/aws//modules/container-definition"
-  version = "~> 5.11.4"
+  version = "~> 5.12.1"
 
   name                            = var.name
   cloudwatch_log_group_name       = "/aws/ecs/${var.name}"
@@ -202,7 +202,7 @@ module "s3" {
   count = var.bucket_name == null ? 1 : 0
 
   source  = "schubergphilis/mcaf-s3/aws"
-  version = "~> 0.14.1"
+  version = "~> 1.5.2"
 
   name_prefix = "${lower(var.name)}-"
   kms_key_arn = local.kms_key_arn
@@ -222,10 +222,12 @@ module "s3" {
         days = 90
       }
 
-      transition = {
-        days          = 30
-        storage_class = "STANDARD_IA"
-      }
+      transition = [
+        {
+          days          = 30
+          storage_class = "STANDARD_IA"
+        }
+      ]
     }
   ]
 }
