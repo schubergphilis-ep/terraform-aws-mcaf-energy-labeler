@@ -5,6 +5,20 @@ All notable changes to this project will automatically be documented in this fil
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.4.0 - 2025-11-11
+
+### What's Changed
+
+#### 🐛 Bug Fixes
+
+* fix: fix the bug that throws the error The argument "statement.5.principals.0.identifiers" is required, but no definition was found. when var.kms_key_arn is defined while var.kms_key_decrypt_iam_principals is empty (#18) @noobnesz
+
+#### 🧺 Miscellaneous
+
+* chore: bump dependencies (#18) @noobnesz
+
+**Full Changelog**: https://github.com/schubergphilis/terraform-aws-mcaf-energy-labeler/compare/v0.3.0...v0.4.0
+
 ## v0.3.0 - 2025-09-15
 
 ### What's Changed
