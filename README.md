@@ -96,7 +96,7 @@ module "aws-energy-labeler" {
 |------|--------|---------|
 | <a name="module_aws_ecs_container_definition"></a> [aws\_ecs\_container\_definition](#module\_aws\_ecs\_container\_definition) | terraform-aws-modules/ecs/aws//modules/container-definition | ~> 7.5.0 |
 | <a name="module_iam_role"></a> [iam\_role](#module\_iam\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
-| <a name="module_kms_key"></a> [kms\_key](#module\_kms\_key) | schubergphilis/mcaf-kms/aws | ~> 0.3.1 |
+| <a name="module_kms_key"></a> [kms\_key](#module\_kms\_key) | schubergphilis/mcaf-kms/aws | ~> 2.2.0 |
 | <a name="module_s3"></a> [s3](#module\_s3) | schubergphilis/mcaf-s3/aws | ~> 3.0.0 |
 
 ## Resources
@@ -115,6 +115,7 @@ module "aws-energy-labeler" {
 | [aws_iam_policy_document.ecs_task](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_policy_document.kms_key_policy](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_policy_document) | data source |
 | [aws_iam_session_context.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/iam_session_context) | data source |
+| [aws_partition.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/partition) | data source |
 | [aws_region.current](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/region) | data source |
 | [aws_subnet.selected](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/subnet) | data source |
 
@@ -130,6 +131,7 @@ module "aws-energy-labeler" {
 | <a name="input_iam_permissions_boundary"></a> [iam\_permissions\_boundary](#input\_iam\_permissions\_boundary) | The permissions boundary to attach to the IAM role | `string` | `null` | no |
 | <a name="input_iam_role_path"></a> [iam\_role\_path](#input\_iam\_role\_path) | The path for the IAM role | `string` | `"/"` | no |
 | <a name="input_image_uri"></a> [image\_uri](#input\_image\_uri) | The URI of the container image to use | `string` | `"ghcr.io/schubergphilis/awsenergylabeler:main"` | no |
+| <a name="input_kms_key_administrator_iam_principals"></a> [kms\_key\_administrator\_iam\_principals](#input\_kms\_key\_administrator\_iam\_principals) | List of IAM principal ARNs allowed to administer the KMS key. | `list(string)` | `[]` | no |
 | <a name="input_kms_key_arn"></a> [kms\_key\_arn](#input\_kms\_key\_arn) | The ARN of the KMS key to use for encryption, if not provided a new KMS key will be created | `string` | `null` | no |
 | <a name="input_kms_key_decrypt_iam_principals"></a> [kms\_key\_decrypt\_iam\_principals](#input\_kms\_key\_decrypt\_iam\_principals) | List of IAM principal ARNs allowed to decrypt the KMS key. Required if kms\_key\_arn is not set. | `list(string)` | `[]` | no |
 | <a name="input_memory"></a> [memory](#input\_memory) | The memory size of the task | `number` | `512` | no |
