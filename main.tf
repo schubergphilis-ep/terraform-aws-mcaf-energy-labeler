@@ -18,7 +18,7 @@ locals {
       export_path             = "s3://${local.bucket_name_with_prefix}"
       frameworks              = length(var.config.frameworks) > 0 ? join(", ", var.config.frameworks) : null
       organizations_zone_name = var.config.zone_name
-      region                  = data.aws_region.current.name
+      region                  = data.aws_region.current.region
       single_account_id       = var.config.single_account_id
     }
   )
@@ -43,7 +43,7 @@ locals {
 }
 
 resource "aws_security_group" "default" {
-  # checkov:skip=CKV2_AWS_5: False positive finding, the security group is attached.
+  # checkov:skip=CKV2_AWS_5: Security Groups are not attached to EC2 instances or ENIs - False positive finding, the security group is attached.
   name        = var.name
   description = "Security group for ECS cluster ${var.name}"
   vpc_id      = data.aws_subnet.selected.vpc_id
@@ -75,7 +75,7 @@ resource "aws_ecs_cluster" "default" {
 }
 
 data "aws_iam_policy_document" "ecs_task" {
-  # checkov:skip=CKV_AWS_356: Cannot set limit resources for security hub or org
+  # checkov:skip=CKV_AWS_356: Data source IAM policy document allows all resources with restricted actions - Cannot set limit resources for security hub or org
 
   statement {
     sid       = "AllowReadOrg"
@@ -164,7 +164,7 @@ resource "aws_cloudwatch_event_target" "default" {
 
 module "aws_ecs_container_definition" {
   source  = "terraform-aws-modules/ecs/aws//modules/container-definition"
-  version = "~> 5.12.1"
+  version = "~> 7.5.0"
 
   name                            = var.name
   cloudwatch_log_group_name       = "/aws/ecs/${var.name}"
@@ -172,7 +172,7 @@ module "aws_ecs_container_definition" {
   cloudwatch_log_group_kms_key_id = local.kms_key_arn
   essential                       = true
   image                           = var.image_uri
-  readonly_root_filesystem        = true
+  readonlyRootFilesystem          = true
   tags                            = var.tags
 
   environment = [
@@ -202,7 +202,7 @@ module "s3" {
   count = var.bucket_name == null ? 1 : 0
 
   source  = "schubergphilis/mcaf-s3/aws"
-  version = "~> 1.5.2"
+  version = "~> 3.0.0"
 
   name_prefix = "${lower(var.name)}-"
   kms_key_arn = local.kms_key_arn

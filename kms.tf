@@ -1,9 +1,23 @@
+locals {
+  account_id = data.aws_caller_identity.current.account_id
+  partition  = data.aws_partition.current.partition
+  region     = data.aws_region.current.region
+
+  # If no administrators are specified, fall back to the current caller so the key
+  # never ends up without a principal able to manage it.
+  iam_administrator = coalescelist(var.kms_key_administrator_iam_principals, [data.aws_iam_session_context.current.issuer_arn])
+}
+
 data "aws_iam_policy_document" "kms_key_policy" {
+  # checkov:skip=CKV_AWS_111: Ensure IAM policies does not allow write access without constraints - False positive, this is a KMS key policy
+  # checkov:skip=CKV_AWS_356: Ensure no IAM policies documents allow "*" as a statement's resource for restrictable actions - False positive, this is a KMS key policy
+  # checkov:skip=CKV_AWS_109: Ensure IAM policies does not allow permissions management / resource exposure without constraints - False positive, this is a KMS key policy
+
   statement {
     sid       = "Base Permissions for root user"
     actions   = ["kms:*"]
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     condition {
       test     = "StringEquals"
@@ -12,17 +26,15 @@ data "aws_iam_policy_document" "kms_key_policy" {
     }
 
     principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-      ]
+      type        = "AWS"
+      identifiers = ["arn:${local.partition}:iam::${local.account_id}:root"]
     }
   }
 
   statement {
     sid       = "Read/List permissions for all IAM users"
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     actions = [
       "kms:Describe*",
@@ -31,31 +43,33 @@ data "aws_iam_policy_document" "kms_key_policy" {
       "kms:ListKeys"
     ]
 
+
     principals {
-      type = "AWS"
-      identifiers = [
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
-      ]
+      type        = "AWS"
+      identifiers = ["arn:${local.partition}:iam::${local.account_id}:root"]
     }
   }
 
   statement {
     sid       = "Administrative permissions"
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     actions = [
+      "kms:CancelKeyDeletion",
       "kms:Create*",
+      "kms:Delete*",
       "kms:Describe*",
-      "kms:Decrypt",
-      "kms:DeleteAlias",
+      "kms:Disable*",
       "kms:Enable*",
-      "kms:Encrypt",
       "kms:Get*",
+      "kms:ImportKeyMaterial",
       "kms:List*",
       "kms:Put*",
       "kms:ReplicateKey",
       "kms:Revoke*",
+      "kms:RotateKeyOnDemand",
+      "kms:ScheduleKeyDeletion",
       "kms:TagResource",
       "kms:UntagResource",
       "kms:Update*"
@@ -63,14 +77,14 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "AWS"
-      identifiers = [data.aws_iam_session_context.current.issuer_arn]
+      identifiers = local.iam_administrator
     }
   }
 
   statement {
     sid       = "Permissions for Cloudwatch log group"
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     actions = [
       "kms:Decrypt",
@@ -82,7 +96,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
 
     principals {
       type        = "Service"
-      identifiers = ["logs.${data.aws_region.current.name}.amazonaws.com"]
+      identifiers = ["logs.${local.region}.amazonaws.com"]
     }
 
     condition {
@@ -90,7 +104,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
       variable = "kms:EncryptionContext:aws:logs:arn"
 
       values = [
-        "arn:aws:logs:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:log-group:/aws/ecs/${var.name}"
+        "arn:aws:logs:${local.region}:${local.account_id}:log-group:/aws/ecs/${var.name}"
       ]
     }
   }
@@ -98,7 +112,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   statement {
     sid       = "Permissions for energy labeler ECS task role"
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     actions = [
       "kms:Decrypt",
@@ -116,7 +130,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
   statement {
     sid       = "Permissions to Decrypt for specified IAM principals"
     effect    = "Allow"
-    resources = ["arn:aws:kms:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:key/*"]
+    resources = ["*"]
 
     actions = [
       "kms:Decrypt"
@@ -133,10 +147,11 @@ module "kms_key" {
   count = var.kms_key_arn == null ? 1 : 0
 
   source  = "schubergphilis/mcaf-kms/aws"
-  version = "~> 0.3.1"
+  version = "~> 2.2.0"
 
-  name        = var.name
-  description = "KMS key used for encrypting all energy labeler resources"
+  name           = var.name
+  default_policy = { enable = false }
+  description    = "KMS key used for encrypting all energy labeler resources"
 }
 
 resource "aws_kms_key_policy" "default" {
