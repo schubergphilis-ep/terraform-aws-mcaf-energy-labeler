@@ -87,6 +87,12 @@ variable "kms_key_decrypt_iam_principals" {
   }
 }
 
+variable "kms_key_administrator_iam_principals" {
+  type        = list(string)
+  default     = []
+  description = "List of IAM principal ARNs allowed to administer the KMS key."
+}
+
 variable "memory" {
   type        = number
   default     = 512

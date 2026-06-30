@@ -1,40 +1,17 @@
-terraform {
-  required_version = ">= 1.9"
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = ">= 6.0"
-    }
-  }
-}
-
 provider "aws" {}
 
 module "aws-energy-labeler-single-account" {
   source = "../../"
 
-  kms_key_arn = "arn:aws:kms:eu-west-1:123456789012:key/1234abcd-12ab-34cd-56ef-123456789012"
-
-  config = {
-    single_account_id = "123456789012"
-  }
-
-  subnet_ids = [
-    "subnet-12345678"
-  ]
+  config                         = { single_account_id = "123456789012" }
+  kms_key_decrypt_iam_principals = ["arn:aws:iam::123456789012:role/MyRole"]
+  subnet_ids                     = ["subnet-12345678"]
 }
 
 module "aws-energy-labeler-zone" {
   source = "../../"
 
-  kms_key_arn = "arn:aws:kms:eu-west-1:123456789012:key/1234abcd-12ab-34cd-56ef-123456789012"
-
-  config = {
-    zone_name = "MYZONE"
-  }
-
-  subnet_ids = [
-    "subnet-12345678"
-  ]
+  config                         = { zone_name = "MYZONE" }
+  kms_key_decrypt_iam_principals = ["arn:aws:iam::123456789012:role/MyRole"]
+  subnet_ids                     = ["subnet-12345678"]
 }

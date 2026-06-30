@@ -43,7 +43,7 @@ locals {
 }
 
 resource "aws_security_group" "default" {
-  # checkov:skip=CKV2_AWS_5: False positive finding, the security group is attached.
+  # checkov:skip=CKV2_AWS_5: Security Groups are not attached to EC2 instances or ENIs - False positive finding, the security group is attached.
   name        = var.name
   description = "Security group for ECS cluster ${var.name}"
   vpc_id      = data.aws_subnet.selected.vpc_id
@@ -75,7 +75,7 @@ resource "aws_ecs_cluster" "default" {
 }
 
 data "aws_iam_policy_document" "ecs_task" {
-  # checkov:skip=CKV_AWS_356: Cannot set limit resources for security hub or org
+  # checkov:skip=CKV_AWS_356: Data source IAM policy document allows all resources with restricted actions - Cannot set limit resources for security hub or org
 
   statement {
     sid       = "AllowReadOrg"
