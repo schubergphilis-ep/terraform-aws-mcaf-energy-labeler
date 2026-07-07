@@ -123,7 +123,7 @@ data "aws_iam_policy_document" "ecs_task" {
 module "iam_role" {
   for_each = local.roles
 
-  source  = "schubergphilis/mcaf-role/aws"
+  source  = "schubergphilis-ep/mcaf-role/aws"
   version = "~> 0.5.3"
 
   name                  = each.value.name
@@ -201,7 +201,7 @@ resource "aws_ecs_task_definition" "default" {
 module "s3" {
   count = var.bucket_name == null ? 1 : 0
 
-  source  = "schubergphilis/mcaf-s3/aws"
+  source  = "schubergphilis-ep/mcaf-s3/aws"
   version = "~> 3.0.0"
 
   name_prefix = "${lower(var.name)}-"
