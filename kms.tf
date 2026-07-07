@@ -146,7 +146,7 @@ data "aws_iam_policy_document" "kms_key_policy" {
 module "kms_key" {
   count = var.kms_key_arn == null ? 1 : 0
 
-  source  = "schubergphilis/mcaf-kms/aws"
+  source  = "schubergphilis-ep/mcaf-kms/aws"
   version = "~> 2.2.0"
 
   name           = var.name
