@@ -95,9 +95,9 @@ module "aws-energy-labeler" {
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_aws_ecs_container_definition"></a> [aws\_ecs\_container\_definition](#module\_aws\_ecs\_container\_definition) | terraform-aws-modules/ecs/aws//modules/container-definition | ~> 7.5.0 |
-| <a name="module_iam_role"></a> [iam\_role](#module\_iam\_role) | schubergphilis/mcaf-role/aws | ~> 0.5.3 |
-| <a name="module_kms_key"></a> [kms\_key](#module\_kms\_key) | schubergphilis/mcaf-kms/aws | ~> 2.2.0 |
-| <a name="module_s3"></a> [s3](#module\_s3) | schubergphilis/mcaf-s3/aws | ~> 3.0.0 |
+| <a name="module_iam_role"></a> [iam\_role](#module\_iam\_role) | schubergphilis-ep/mcaf-role/aws | ~> 0.5.3 |
+| <a name="module_kms_key"></a> [kms\_key](#module\_kms\_key) | schubergphilis-ep/mcaf-kms/aws | ~> 2.2.0 |
+| <a name="module_s3"></a> [s3](#module\_s3) | schubergphilis-ep/mcaf-s3/aws | ~> 3.0.0 |
 
 ## Resources
 
