@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [1.1.0](https://github.com/schubergphilis-ep/terraform-aws-mcaf-energy-labeler/compare/v1.0.1...v1.1.0) (2026-07-21)
+
+
+### 🚀 Features
+
+* add bucket_force_destroy variable ([#4](https://github.com/schubergphilis-ep/terraform-aws-mcaf-energy-labeler/issues/4)) ([e0efe19](https://github.com/schubergphilis-ep/terraform-aws-mcaf-energy-labeler/commit/e0efe19f9d1816d739da202a25f46a0b439f1899))
+
 ## [1.0.1](https://github.com/schubergphilis-ep/terraform-aws-mcaf-energy-labeler/compare/v1.0.0...v1.0.1) (2026-07-07)
 
 
