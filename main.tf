@@ -204,10 +204,11 @@ module "s3" {
   source  = "schubergphilis-ep/mcaf-s3/aws"
   version = "~> 3.0.0"
 
-  name_prefix = "${lower(var.name)}-"
-  kms_key_arn = local.kms_key_arn
-  versioning  = true
-  tags        = var.tags
+  name_prefix   = "${lower(var.name)}-"
+  force_destroy = var.bucket_force_destroy
+  kms_key_arn   = local.kms_key_arn
+  versioning    = true
+  tags          = var.tags
 
   lifecycle_rule = [
     {

@@ -9,6 +9,12 @@ variable "bucket_name" {
   }
 }
 
+variable "bucket_force_destroy" {
+  type        = bool
+  default     = false
+  description = "A boolean that indicates all objects should be deleted when deleting the bucket."
+}
+
 variable "bucket_prefix" {
   type        = string
   default     = "/"
