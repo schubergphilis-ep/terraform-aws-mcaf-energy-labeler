@@ -125,6 +125,7 @@ module "aws-energy-labeler" {
 |------|-------------|------|---------|:--------:|
 | <a name="input_config"></a> [config](#input\_config) | Map containing labeler configuration options | <pre>object({<br/>    allowed_account_ids        = optional(list(string), [])<br/>    denied_account_ids         = optional(list(string), [])<br/>    frameworks                 = optional(list(string), [])<br/>    log_level                  = optional(string)<br/>    report_suppressed_findings = optional(bool, false)<br/>    single_account_id          = optional(string)<br/>    zone_name                  = optional(string)<br/>  })</pre> | n/a | yes |
 | <a name="input_subnet_ids"></a> [subnet\_ids](#input\_subnet\_ids) | VPC subnet ids where the labeler will be deployed | `list(string)` | n/a | yes |
+| <a name="input_bucket_force_destroy"></a> [bucket\_force\_destroy](#input\_bucket\_force\_destroy) | A boolean that indicates all objects should be deleted when deleting the bucket. | `bool` | `false` | no |
 | <a name="input_bucket_name"></a> [bucket\_name](#input\_bucket\_name) | The name of the bucket to store the exported findings (will be created if not specified) | `string` | `null` | no |
 | <a name="input_bucket_prefix"></a> [bucket\_prefix](#input\_bucket\_prefix) | The prefix to use for the bucket | `string` | `"/"` | no |
 | <a name="input_cluster_arn"></a> [cluster\_arn](#input\_cluster\_arn) | ARN of an existing ECS cluster, if left empty a new cluster will be created | `string` | `null` | no |
